@@ -5,3 +5,15 @@
 * useres can search for tournaments based on date or type of tournament eg, knockout, cup mode, time attack...
 * user can add change and delete tournaments as well as add and delete registrasions to them
 * user page can show how many tournaments a user has hosted and played in
+
+
+
+install flask-library:
+
+$ pip install flask
+
+$ flask run
+
+you can also create the database with
+
+$ sqlite3 database.db < schema.sql

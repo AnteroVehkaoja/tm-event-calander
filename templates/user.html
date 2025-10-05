@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<html>
+
+
+<h2> user  {{user[0]}} profile </h2><br />
+
+<h2>users created tournaments</h2>
+{% for tournament in tournaments %}
+<h3> <a href="/tournament/{{tournament[4]}}">{{tournament[0]}} </a></h3>
+
+    <p1> {{tournament[1]}}</p1><br />
+    <p1> {{tournament[2]}}</p1><br />
+    <p1> {{tournament[3]}}</p1><br />
+ {% endfor %}
+
+<h3> <a href="/"> frontpage </a>   </h3>
+</html>

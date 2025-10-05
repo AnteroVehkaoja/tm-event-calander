@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, math, secrets
 from flask import Flask
 from flask import redirect, render_template, request, session
 import db, config
@@ -77,6 +77,7 @@ def login2():
     if len(password_hash) ==1:
         if check_password_hash(password_hash[0][0], password):
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
     else:
         return "VIRHE: väärä tunnus tai salasana"
@@ -94,6 +95,7 @@ def tournamentmake():
 @app.route("/newtournament", methods = ["POST"])
 def newtournament():
     require_login()
+    check_csrf()
     title = request.form["title"]
     descr = request.form["descr"]
     qualifier = request.form["qualifier"]
@@ -116,6 +118,8 @@ def tournamentdelete():
 @app.route("/tournament/<int:tournament_id>")
 def tournamentshow(tournament_id):
     tournament = tournaments.get_tournament(tournament_id)
+    if not tournament:
+        abort(404)
     registered_people = registration.registered_people(tournament_id)
     print(registered_people)
     people=[]
@@ -124,8 +128,6 @@ def tournamentshow(tournament_id):
         print(name)
         people.append(name[0])
     id = users.get_user_id(tournament[0][3])[0]
-    if not tournament:
-        abort(404)
     return render_template("tournament.html", tournament = tournament,user_id = id,people = people)
 
 @app.route("/edit/<int:tournament_id>", methods=["GET","POST"])
@@ -140,6 +142,8 @@ def tournamentedit(tournament_id):
         return render_template("edit.html", tournament=tournament)
 
     if request.method == "POST":
+        check_csrf()
+        require_login()
         title = request.form["title"]
         descr = request.form["descr"]
         qualifier = request.form["qualifier"]
@@ -163,8 +167,13 @@ def show_user(user_id):
 
 @app.route("/register/<int:tournament_id>", methods =["POST"])
 def registrations(tournament_id):
+    check_csrf()
+    require_login()
     user_id = users.get_user_id(session["username"])
     registration.add_registration(tournament_id,user_id[0])
     return redirect("/tournament/"+str(tournament_id))
 
 
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)

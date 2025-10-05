@@ -90,3 +90,8 @@ def newtournament():
 def tournamentdelete():
     tournaments.delete_user_tourenaments(session["username"])
     return redirect("/")
+
+@app.route("/tournament/<int:tournament_id>")
+def tournamentshow(tournament_id):
+    tournament = tournaments.get_tournament(tournament_id)
+    return render_template("tournament.html", tournament = tournament)

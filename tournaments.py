@@ -6,8 +6,13 @@ def add_tournament(title,descr,host_id,qualifier,whenevent):
 
 
 def get_tournaments():
-    sql = "SELECT title,description_of_event,host_id,whenevent FROM tournaments ORDER BY whenevent DESC "
+    sql = "SELECT id,title,description_of_event,host_id,whenevent FROM tournaments ORDER BY whenevent DESC "
     return db.query(sql)
+
+
+def get_tournament(tournament_id):
+    sql = "SELECT title,description_of_event,host_id,whenevent FROM tournaments WHERE id = ?"
+    return db.query(sql,[tournament_id])
 
 def delete_user_tourenaments(username):
     sql = "DELETE FROM tournaments WHERE host_id = ?"

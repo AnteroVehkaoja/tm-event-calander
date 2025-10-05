@@ -5,10 +5,16 @@
 <p>
 
 {{tournament}}
+{% if tournament[0][3] == session.username%}
+
 
 </p>
+<p>
+<a href="/edit/{{tournament[0][0]}}">edit the event </a>
 
 
+</p>
+{% endif %}
 
 
 </html>

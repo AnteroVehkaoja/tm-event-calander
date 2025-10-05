@@ -8,7 +8,7 @@ def add_tournament(title,descr,host_id,qualifier,whenevent):
 def get_tournaments():
     sql = "SELECT id,title,description_of_event,host_id,whenevent FROM tournaments ORDER BY whenevent DESC "
     result = db.query(sql)
-    return result if result else None
+    return result if result else []
 
 
 def get_tournament(tournament_id):

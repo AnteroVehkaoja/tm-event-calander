@@ -8,6 +8,7 @@ from werkzeug.security import check_password_hash
 import tournaments
 from flask import abort
 import users
+import registration
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -53,7 +54,7 @@ def create():
     except sqlite3.IntegrityError:
         return render_template("register2.html", text="tunnus varattu")
     
-    return redirect("/")
+    return redirect("/login")
 
 @app.route("/login")
 def login():
@@ -65,20 +66,18 @@ def login2():
     password = request.form["password"]
     if len(username) < 4:
         abort(403)
-    
     if len(username) > 50:
         abort(403)
     if len(password) > 100:
-       abort(403)
-    
-    
+        abort(403)
     
     sql = "SELECT password_hash FROM users WHERE username = ?"
-    password_hash = db.query(sql, [username])[0][0]
+    password_hash = db.query(sql,[username])
 
-    if check_password_hash(password_hash, password):
-        session["username"] = username
-        return redirect("/")
+    if len(password_hash) ==1:
+        if check_password_hash(password_hash[0][0], password):
+            session["username"] = username
+            return redirect("/")
     else:
         return "VIRHE: väärä tunnus tai salasana"
     
@@ -117,11 +116,17 @@ def tournamentdelete():
 @app.route("/tournament/<int:tournament_id>")
 def tournamentshow(tournament_id):
     tournament = tournaments.get_tournament(tournament_id)
-
+    registered_people = registration.registered_people(tournament_id)
+    print(registered_people)
+    people=[]
+    for touple in registered_people:
+        name = users.get_user(touple[0])
+        print(name)
+        people.append(name[0])
     id = users.get_user_id(tournament[0][3])[0]
     if not tournament:
         abort(404)
-    return render_template("tournament.html", tournament = tournament,user_id = id)
+    return render_template("tournament.html", tournament = tournament,user_id = id,people = people)
 
 @app.route("/edit/<int:tournament_id>", methods=["GET","POST"])
 def tournamentedit(tournament_id):
@@ -155,3 +160,11 @@ def show_user(user_id):
         abort(404)
     tournaments = users.get_tournaments_person(user[0])
     return render_template("user.html",user=user,tournaments = tournaments)
+
+@app.route("/register/<int:tournament_id>", methods =["POST"])
+def registrations(tournament_id):
+    user_id = users.get_user_id(session["username"])
+    registration.add_registration(tournament_id,user_id[0])
+    return redirect("/tournament/"+str(tournament_id))
+
+

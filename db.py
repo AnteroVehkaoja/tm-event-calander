@@ -24,6 +24,10 @@ def get_db():
         db.cursor().execute("CREATE TABLE tournaments (id INTEGER PRIMARY KEY,title TEXT,description_of_event TEXT,host_id REFERENCES users,qualifier INTEGER,whenevent INTEGER)")
     except:
         pass
+    try:
+        db.cursor().execute("CREATE TABLE registrations (id INTEGER PRIMARY KEY,tournament_id REFERENCES tournaments,user_id REFERENCES users)")
+    except:
+        pass
     return db
 
 def execute(sql, params=[]):

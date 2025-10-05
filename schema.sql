@@ -17,3 +17,9 @@ CREATE TABLE tournaments (
     qualifier INTEGER,
     whenevent INTEGER
 );
+
+CREATE TABLE registrations (
+    id INTEGER PRIMARY KEY,
+    tournament_id REFERENCES tournaments,
+    user_id REFERENCES users
+);

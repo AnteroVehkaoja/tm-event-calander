@@ -11,9 +11,13 @@ def get_tournaments():
 
 
 def get_tournament(tournament_id):
-    sql = "SELECT title,description_of_event,host_id,whenevent FROM tournaments WHERE id = ?"
+    sql = "SELECT id,title,description_of_event,host_id,qualifier,whenevent FROM tournaments WHERE id = ?"
     return db.query(sql,[tournament_id])
 
 def delete_user_tourenaments(username):
     sql = "DELETE FROM tournaments WHERE host_id = ?"
     db.execute(sql, [username])
+
+def update_tournament(title,descr,qualifier,whenevent,tournament_id):
+    sql = "UPDATE tournaments SET title = ?,description_of_event = ?,qualifier = ?,whenevent = ? WHERE id = ?"
+    db.execute(sql,[title,descr,qualifier,whenevent,tournament_id])

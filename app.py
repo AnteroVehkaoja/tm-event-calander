@@ -95,3 +95,21 @@ def tournamentdelete():
 def tournamentshow(tournament_id):
     tournament = tournaments.get_tournament(tournament_id)
     return render_template("tournament.html", tournament = tournament)
+
+@app.route("/edit/<int:tournament_id>", methods=["GET","POST"])
+def tournamentedit(tournament_id):
+    tournament = tournaments.get_tournament(tournament_id)
+
+    if request.method == "GET":
+        return render_template("edit.html", tournament=tournament)
+
+    if request.method == "POST":
+        title = request.form["title"]
+        descr = request.form["descr"]
+        qualifier = request.form["qualifier"]
+        whenevent=request.form["whenevent"]
+        tournaments.update_tournament(title,descr,qualifier,whenevent,tournament_id)
+        return redirect("/")
+
+
+

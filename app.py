@@ -6,6 +6,7 @@ from flask import g
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 import tournaments
+from flask import abort
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -35,6 +36,12 @@ def create():
     if len(username) < 4:
         return render_template("register2.html", text ="create a longer name please") 
     
+    if len(username) > 50:
+        return render_template("register2.html", text= "shorter name please")
+    
+    if len(password1) > 100 or len(password2) > 100:
+        return render_template("register2.html", text= "password too long")
+
     if password1!= password2:
         return render_template("register2.html", text ="It seemes your passwords werent the same, did you perhaps mistype")
     password_hash = generate_password_hash(password2)
@@ -55,6 +62,15 @@ def login():
 def login2():
     username = request.form["username"]
     password = request.form["password"]
+    if len(username) < 4:
+        abort(403)
+    
+    if len(username) > 50:
+        abort(403)
+    if len(password) > 100:
+       abort(403)
+    
+    
     
     sql = "SELECT password_hash FROM users WHERE username = ?"
     password_hash = db.query(sql, [username])[0][0]
@@ -77,29 +93,41 @@ def tournamentmake():
 
 @app.route("/newtournament", methods = ["POST"])
 def newtournament():
+    require_login()
     title = request.form["title"]
     descr = request.form["descr"]
     qualifier = request.form["qualifier"]
     host_id = session["username"]
     whenevent = request.form["whenevent"]
-
-    tournaments.add_tournament(title,descr,host_id,qualifier,whenevent)
+    if not title or len(title) > 100 or len(descr) > 7000 or len(qualifier)>2 or len(whenevent)>13:
+        abort(403)
+    try:
+        tournaments.add_tournament(title,descr,host_id,qualifier,whenevent)
+    except sqlite3.IntegrityError:
+        abort(403)
     return redirect("/")
 
 @app.route("/tournamentdelete")
 def tournamentdelete():
+    require_login()
     tournaments.delete_user_tourenaments(session["username"])
     return redirect("/")
 
 @app.route("/tournament/<int:tournament_id>")
 def tournamentshow(tournament_id):
     tournament = tournaments.get_tournament(tournament_id)
+    if not tournament:
+        abort(404)
     return render_template("tournament.html", tournament = tournament)
 
 @app.route("/edit/<int:tournament_id>", methods=["GET","POST"])
 def tournamentedit(tournament_id):
     tournament = tournaments.get_tournament(tournament_id)
-
+    require_login()
+    if not tournament:
+        abort(404)
+    if tournament[0][3] != session["username"]:
+        abort(403)
     if request.method == "GET":
         return render_template("edit.html", tournament=tournament)
 
@@ -108,8 +136,12 @@ def tournamentedit(tournament_id):
         descr = request.form["descr"]
         qualifier = request.form["qualifier"]
         whenevent=request.form["whenevent"]
+        if not title or len(title) > 100 or len(descr) > 7000 or len(qualifier)>2 or len(whenevent)>13:
+            abort(403)
         tournaments.update_tournament(title,descr,qualifier,whenevent,tournament_id)
         return redirect("/")
 
-
+def require_login():
+    if "username" not in session:
+        abort(403)
 

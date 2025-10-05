@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 import tournaments
 from flask import abort
+import users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -116,9 +117,11 @@ def tournamentdelete():
 @app.route("/tournament/<int:tournament_id>")
 def tournamentshow(tournament_id):
     tournament = tournaments.get_tournament(tournament_id)
+
+    id = users.get_user_id(tournament[0][3])[0]
     if not tournament:
         abort(404)
-    return render_template("tournament.html", tournament = tournament)
+    return render_template("tournament.html", tournament = tournament,user_id = id)
 
 @app.route("/edit/<int:tournament_id>", methods=["GET","POST"])
 def tournamentedit(tournament_id):
@@ -145,3 +148,10 @@ def require_login():
     if "username" not in session:
         abort(403)
 
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    tournaments = users.get_tournaments_person(user[0])
+    return render_template("user.html",user=user,tournaments = tournaments)

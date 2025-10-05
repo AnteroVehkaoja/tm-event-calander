@@ -24,6 +24,7 @@ description of the event, make sure to mention where to register if needed and w
     <input type="text" name="whenevent" maxlength="13"/>
     
 </p>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
 <input type="submit" value="send" />
 
 

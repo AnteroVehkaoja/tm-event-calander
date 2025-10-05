@@ -17,5 +17,20 @@
 </p>
 {% endif %}
 
+{% if session.username not in people%}
+
+<form action="/register/{{tournament[0][0]}}" method="post">
+
+<input type="submit" value ="register">
+
+
+
+</form>
+{% endif %}
+
+
+<h1> {{people}} </h1>
+
+
 <h3> <a href="/"> frontpage </a>   </h3>
 </html>

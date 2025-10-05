@@ -8,20 +8,20 @@
 <form action="/newtournament" method="post">
 <p>
     TITLE <br />
-    <input type="text" name="title" />
+    <input type="text" name="title" maxlength="100" />
 </p>
 <p>
 description of the event, make sure to mention where to register if needed and where it will be taking place
-<br /><textarea name="descr" rows="6" cols="60"></textarea>
+<br /><textarea name="descr" rows="6" cols="60"maxlength="7000" > </textarea>
 </p>
 <p>
     qualifier? 1 for yes 2 for no
-    <input type="text" name="qualifier">
+    <input type="text" name="qualifier" maxlength="2">
 
 </p>
 <p>
     when is the event happening yyyy:mm:dd:hh:mm ?
-    <input type="text" name="whenevent" />
+    <input type="text" name="whenevent" maxlength="13"/>
     
 </p>
 <input type="submit" value="send" />

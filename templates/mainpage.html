@@ -4,7 +4,7 @@
 
 {% block content %}
 
-
+<h1>All tournaments</h1>
 {% for tournament in tournamentss %}
 <div class="tournament">
 <h1>
@@ -20,7 +20,6 @@
 {% if session.username %}
 
 <a href="/tournamentmake">make new tournament </a><br />
-<a href="/tournamentdelete">delete all your tournaments </a>
 </div>
 {% endif %}
 {%endblock%}

@@ -14,10 +14,10 @@
     <div class="nav">
         <nav>
             <ul>
-                <li><a href="/">frongpage</a></li>
+                <li><a href="/">frontpage</a></li>
                 <li><a href="/search">search</a></li>
                 {%if session.username%}
-                <li>logged in as<a href="/userprofile">{{session.username}}</a></li>
+                <li>logged in as<a href="/userprofile"> {{session.username}}</a></li>
                 <li><a href="/tournamentmake">make new tournament </a></li>
                 <li><a href="/logout">log out</a></li>
                 {%else%}

@@ -4,7 +4,9 @@
 
 {% block content %}
 
-<h2> user  {{user[0]}} profile </h2><br />
+<h2> user  {{user[0]}}'s' profile </h2><br />
+
+<h1>the number of matches the user is registered in: {{number}}</h1>
 
 <h2>users created tournaments</h2>
 {% for tournament in tournaments %}
@@ -13,9 +15,12 @@
     <a href="/tournament/{{tournament[0]}}">{{tournament[1]}} </a></h1><br />
     <p1><b>is there a qualifier:</b> {{tournament[3]}}</p1><br /><br />
 
-    <p1><b>description:</b> {{tournament[2]| show_lines}}</p1><br /><br />
-    <p1><b>organizer:</b> {{tournament[4]}}</p1><br /><br />
+    <p1><b>description:</b> {{tournament[2]| show_lines}}</p1><br /><br />  
     <p1><b>date:</b> {{tournament[4]}}</p1><br /><br />
 </div>
+
+
  {% endfor %}
+
+
 {%endblock%}

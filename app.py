@@ -170,6 +170,7 @@ def removetournament(tournament_id):
         check_csrf()
         if "continue" in request.form:
             tournaments.delete_tournament(tournament[0][0])
+            registration.del_all_reg(tournament[0][0])
         return redirect("/")
 
 
@@ -207,3 +208,11 @@ def search():
     query = request.args.get("query")
     results = users.search(query) if query else []
     return render_template("search.html", query=query, results=results)
+
+@app.route("/delreg/<int:tournament_id>", methods =["POST"])
+def delreg(tournament_id):
+    check_csrf()
+    require_login()
+    user_id = users.get_user_id(session["username"])
+    registration.del_registration(tournament_id,user_id[0])
+    return redirect("/tournament/"+str(tournament_id))

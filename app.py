@@ -155,6 +155,24 @@ def tournamentedit(tournament_id):
         tournaments.update_tournament(title,descr,qualifier,whenevent,tournament_id)
         return redirect("/")
 
+@app.route("/remove/<int:tournament_id>", methods=["GET","POST"])
+def removetournament(tournament_id):
+    require_login()
+    tournament = tournaments.get_tournament(tournament_id)
+    if not tournament:
+        abort(404)
+    if tournament[0][3] != session["username"]:
+        abort(403)
+    if request.method == "GET":
+        return render_template("remove.html", tournament=tournament)
+
+    if request.method =="POST":
+        check_csrf()
+        if "continue" in request.form:
+            tournaments.delete_tournament(tournament[0][0])
+        return redirect("/")
+
+
 def require_login():
     if "username" not in session:
         abort(403)

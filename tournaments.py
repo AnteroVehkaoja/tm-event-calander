@@ -23,3 +23,7 @@ def delete_user_tourenaments(username):
 def update_tournament(title,descr,qualifier,whenevent,tournament_id):
     sql = "UPDATE tournaments SET title = ?,description_of_event = ?,qualifier = ?,whenevent = ? WHERE id = ?"
     db.execute(sql,[title,descr,qualifier,whenevent,tournament_id])
+
+def delete_tournament(id):
+    sql = "DELETE FROM tournaments WHERE id = ?"
+    db.execute(sql, [id])

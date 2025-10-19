@@ -13,6 +13,10 @@ def get_user_id(username):
     return result[0] if result else None
 
 def get_tournaments_person(username):
-    sql = "SELECT title,description_of_event,qualifier,whenevent,id FROM tournaments WHERE host_id = ?"
+    sql = "SELECT id,title,description_of_event,qualifier,whenevent FROM tournaments WHERE host_id = ?"
     result = db.query(sql, [username])
     return result if result else None
+
+def search(query):
+    sql ="""SELECT id,title,description_of_event,host_id,whenevent FROM tournaments WHERE title LIKE ?"""
+    return db.query(sql, ["%" + query +"%"])

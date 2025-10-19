@@ -16,14 +16,18 @@ app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    
-    db.execute("INSERT INTO visits (visited_at) VALUES (datetime('now'))")
-    result = db.query("SELECT COUNT(*) FROM visits")
-    count = result[0][0]
     tournamentss = tournaments.get_tournaments()
-    return render_template("mainpage.html",count = count, tournamentss=tournamentss)
+    return render_template("mainpage.html", tournamentss=tournamentss)
 
-
+@app.route("/userprofile")
+def userprofile():
+    try:
+        if session["username"]:
+            userid = users.get_user_id(session["username"])[0]
+            return redirect("/user/"+str(userid))
+        else:
+            abort(403)
+    except:abort(403)
 @app.route("/register")
 def register():
     return render_template("register.html")
@@ -101,7 +105,7 @@ def newtournament():
     qualifier = request.form["qualifier"]
     host_id = session["username"]
     whenevent = request.form["whenevent"]
-    if not title or len(title) > 100 or len(descr) > 7000 or len(qualifier)>2 or len(whenevent)>13:
+    if not title or len(title) > 100 or len(descr) > 7000 or len(qualifier)>2 or len(whenevent)>16:
         abort(403)
     try:
         tournaments.add_tournament(title,descr,host_id,qualifier,whenevent)
@@ -121,11 +125,9 @@ def tournamentshow(tournament_id):
     if not tournament:
         abort(404)
     registered_people = registration.registered_people(tournament_id)
-    print(registered_people)
     people=[]
     for touple in registered_people:
         name = users.get_user(touple[0])
-        print(name)
         people.append(name[0])
     id = users.get_user_id(tournament[0][3])[0]
     return render_template("tournament.html", tournament = tournament,user_id = id,people = people)
@@ -163,6 +165,8 @@ def show_user(user_id):
     if not user:
         abort(404)
     tournaments = users.get_tournaments_person(user[0])
+    if tournaments == None:
+        tournaments = []
     return render_template("user.html",user=user,tournaments = tournaments)
 
 @app.route("/register/<int:tournament_id>", methods =["POST"])

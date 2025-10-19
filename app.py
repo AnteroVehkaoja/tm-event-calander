@@ -177,3 +177,11 @@ def registrations(tournament_id):
 def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
+    return
+
+
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    results = users.search(query) if query else []
+    return render_template("search.html", query=query, results=results)

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %} Etusivu {% endblock %}
+
+{% block content %}
+
+<h1> are you sure you want to delete this tournament</h1>
+
+<div class="singletournament">
+<h1>
+   {{tournament[0][1]}} </a></h1><br />
+    <p1>is there a qualifier: {{tournament[0][4]}}</p1><br /><br />
+
+    <p1>description: {{tournament[0][2]}}</p1><br /><br />
+    <p1>organizer:<a href="/user/{{user_id}}">{{tournament[0][3]}}</a></p1><br /><br />
+    <p1>date: {{tournament[0][5]}}</p1><br /><br />
+
+
+
+
+</div>
+
+<form action="/remove/{{tournament[0][0]}}" method="post">
+
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" name="continue" value="Delete" />
+  <input type="submit" name="cancel" value="Cancel" />
+
+</form>
+{%endblock%}

@@ -18,5 +18,12 @@ def get_tournaments_person(username):
     return result if result else None
 
 def search(query):
-    sql ="""SELECT id,title,description_of_event,host_id,whenevent FROM tournaments WHERE title LIKE ?"""
+    sql ="""SELECT id,title,description_of_event,host_id,whenevent,qualifier FROM tournaments WHERE title LIKE ?"""
     return db.query(sql, ["%" + query +"%"])
+
+def user_register_count(user_id):
+    print(user_id)
+    sql = """SELECT *  FROM registrations WHERE user_id = ? """
+    result = db.query(sql,[user_id])
+    print(result)
+    return len(result) if result else 0

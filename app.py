@@ -183,7 +183,8 @@ def show_user(user_id):
     tournaments = users.get_tournaments_person(user[0])
     if tournaments == None:
         tournaments = []
-    return render_template("user.html",user=user,tournaments = tournaments)
+    registrasion_number = users.user_register_count(user_id)
+    return render_template("user.html",user=user,tournaments = tournaments,number = registrasion_number)
 
 @app.route("/register/<int:tournament_id>", methods =["POST"])
 def registrations(tournament_id):

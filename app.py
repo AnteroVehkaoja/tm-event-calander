@@ -1,6 +1,6 @@
 import sqlite3, math, secrets
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, flash
 import db, config
 from flask import g
 from werkzeug.security import generate_password_hash
@@ -9,6 +9,7 @@ import tournaments
 from flask import abort
 import users
 import registration
+import markupsafe
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -68,13 +69,6 @@ def login():
 def login2():
     username = request.form["username"]
     password = request.form["password"]
-    if len(username) < 4:
-        abort(403)
-    if len(username) > 50:
-        abort(403)
-    if len(password) > 100:
-        abort(403)
-    
     sql = "SELECT password_hash FROM users WHERE username = ?"
     password_hash = db.query(sql,[username])
 
@@ -83,9 +77,12 @@ def login2():
             session["username"] = username
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
+        else:
+            flash("wrong password")
+            return redirect("/login")
     else:
-        return "VIRHE: väärä tunnus tai salasana"
-    
+        flash("wrong password or username")
+        return redirect("/login")
 @app.route("/logout")
 def logout():
     del session["username"]
@@ -105,7 +102,7 @@ def newtournament():
     qualifier = request.form["qualifier"]
     host_id = session["username"]
     whenevent = request.form["whenevent"]
-    if not title or len(title) > 100 or len(descr) > 7000 or len(qualifier)>2 or len(whenevent)>16:
+    if not title or len(title) > 100 or len(descr) > 7000 or len(qualifier)>3 or len(whenevent)>16:
         abort(403)
     try:
         tournaments.add_tournament(title,descr,host_id,qualifier,whenevent)
@@ -150,7 +147,7 @@ def tournamentedit(tournament_id):
         descr = request.form["descr"]
         qualifier = request.form["qualifier"]
         whenevent=request.form["whenevent"]
-        if not title or len(title) > 100 or len(descr) > 7000 or len(qualifier)>2 or len(whenevent)>13:
+        if not title or len(title) > 100 or len(descr) > 7000 or len(qualifier)>3 or len(whenevent)>13:
             abort(403)
         tournaments.update_tournament(title,descr,qualifier,whenevent,tournament_id)
         return redirect("/")
@@ -191,7 +188,9 @@ def show_user(user_id):
 @app.route("/register/<int:tournament_id>", methods =["POST"])
 def registrations(tournament_id):
     check_csrf()
-    require_login()
+    if "username" not in session:
+        flash("You need to log in to register, please do so :)")
+        return redirect("/tournament/"+str(tournament_id))
     user_id = users.get_user_id(session["username"])
     registration.add_registration(tournament_id,user_id[0])
     return redirect("/tournament/"+str(tournament_id))
@@ -213,6 +212,16 @@ def search():
 def delreg(tournament_id):
     check_csrf()
     require_login()
-    user_id = users.get_user_id(session["username"])
+    try:    
+        user_id = users.get_user_id(session["username"])
+    except:
+        abort(403)
     registration.del_registration(tournament_id,user_id[0])
     return redirect("/tournament/"+str(tournament_id))
+
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)

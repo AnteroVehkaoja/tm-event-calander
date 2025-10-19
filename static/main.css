@@ -1,0 +1,56 @@
+.header {
+    background-color: rgb(206, 205, 205);
+    color: rgb(0, 0, 0);
+    padding: 1em;
+    margin: 0.5em 0;
+}
+
+body {
+  margin: auto;
+  max-width: 50em;
+  font-family: sans-serif;
+  background-color: rgb(29, 0, 97);
+}
+.nav{
+    background-color: rgb(151, 151, 151);
+    padding: 1em;
+    margin: 2em 0;
+}
+
+.content {
+    background-color: rgb(243, 229, 148);
+    padding: 2em;
+    margin: 0;
+}
+
+nav {
+    text-align: left;
+}
+
+nav ul{
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    display: inline-block;
+    padding: 0 1em;
+    margin: 0;
+}
+
+.tournament {
+border: 3px dotted black    ;
+padding:  0.5em 0.5em;
+margin:  1em;
+}
+
+.singletournament {
+border: 3px solid black    ;
+padding:  0.5em 0.5em;
+margin:  1em;
+}
+.register {
+border: 3px dotted black    ;
+padding:  0.5em 0.5em;
+margin:  1em;
+}

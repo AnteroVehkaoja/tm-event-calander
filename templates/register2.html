@@ -1,13 +1,15 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
+
+{% block title %} Etusivu {% endblock %}
+
+{% block content %}
     <head>
         <title> {{text}} </title>
     </head>
-<body>
+
     <h1>{{text}}</h1>
 
     <a href="/register">takaisin</a>
-</body>
 
+{%endblock%}
 
-</html>

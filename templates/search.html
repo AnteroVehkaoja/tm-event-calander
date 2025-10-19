@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+{% extends "layout.html" %}
 
-<html>
+{% block title %} Etusivu {% endblock %}
+
+{% block content %}
 
 <head>
 <title> Haku </title>
 </head>
-<body>
   <h1>Haku</h1>
 
   <form action="/search" method="get">
@@ -26,17 +27,17 @@
   
   <ul>
   {% for result in results %}
-    <h1>
-{{result}}
+    <div class="tournament">
+<h1>
+    <a href="/tournament/{{result[0]}}">{{result[1]}} </a></h1><br />
+    <p1>is there a qualifier: {{result[5]}}</p1><br /><br />
 
-    </h1>
-  {% endfor %}
+    <p1>description: {{result[2]}}</p1><br /><br />
+    <p1>organizer: {{result[3]}}</p1><br /><br />
+    <p1>date: {{result[4]}}</p1><br /><br />
+</div>
+ {% endfor %}
   </ul>
   {% endif %}
-</body>
 
-
-
-
-
-</html>
+{%endblock%}

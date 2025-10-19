@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{%block title %}  {%endblock%}</title>
+<link rel="stylesheet" href="/static/main.css">
+
+</head>
+
+<body>
+    <div class="header">
+        <h1> Tournaments </h1>
+    </div>
+
+    <div class="nav">
+        <nav>
+            <ul>
+                <li><a href="/">frongpage</a></li>
+                <li><a href="/search">search</a></li>
+                {%if session.username%}
+                <li>logged in as<a href="/userprofile">{{session.username}}</a></li>
+                <li><a href="/tournamentmake">make new tournament </a></li>
+                <li><a href="/logout">log out</a></li>
+                {%else%}
+                <li><a href="/register">make account</a></li>
+                <li><a href="/login"> log in</a></li>
+                {%endif%}
+               
+            </ul>
+
+
+
+        </nav>
+
+
+
+    </div>
+
+    <div class = "content">
+        {% block content %}{% endblock %}
+
+    </div>
+
+
+
+
+
+</body>
+</html>

@@ -1,46 +1,27 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-<title>Tournament calendar</title>
+{% block title %} Etusivu {% endblock %}
 
-</head>
+{% block content %}
 
-<body>
-<p>
-    <a href="/search">Haku</a>
-</p>
-    {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä {{ session.username }}
-  </p>
-    <p>
-        <a href="/logout">Kirjaudu ulos</a>
-    </p>
-    {% else %}
-    register bit <a href="/register">Luo tunnus</a> <br />
-    Login bit <a href="/login"> log in</a> <br /><br /><br />
-    Sivua on ladattu  {{ count }}  kertaa
-
- {% endif %}
 
 {% for tournament in tournamentss %}
+<div class="tournament">
 <h1>
-    {{tournament[1]}} </h1><br />
+    <a href="/tournament/{{tournament[0]}}">{{tournament[1]}} </a></h1><br />
+    <p1>is there a qualifier: {{tournament[5]}}</p1><br /><br />
 
-    <p1> {{tournament[2]}}</p1><br />
-    <p1> {{tournament[3]}}</p1><br />
-    <p1> {{tournament[4]}}</p1><br />
-    <p1> <a href="/tournament/{{tournament[0]}}">link to tournament page </a></p1><br />
+    <p1>description: {{tournament[2]}}</p1><br /><br />
+    <p1>organizer: {{tournament[3]}}</p1><br /><br />
+    <p1>date: {{tournament[4]}}</p1><br /><br />
+</div>
  {% endfor %}
 
 {% if session.username %}
 
 <a href="/tournamentmake">make new tournament </a><br />
 <a href="/tournamentdelete">delete all your tournaments </a>
-</body>
+</div>
 {% endif %}
+{%endblock%}
 
-
- 
-</html>

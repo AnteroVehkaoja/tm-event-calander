@@ -1,9 +1,8 @@
-<!DOCTYPE html>
+{% extends "layout.html" %}
 
-<html>
+{% block title %} Etusivu {% endblock %}
 
-
-<body>
+{% block content %}
     
 <form action="/newtournament" method="post">
 <p>
@@ -21,7 +20,7 @@ description of the event, make sure to mention where to register if needed and w
 </p>
 <p>
     when is the event happening yyyy:mm:dd:hh:mm ?
-    <input type="text" name="whenevent" maxlength="13"/>
+    <input type="text" name="whenevent" maxlength="16"/>
     
 </p>
 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
@@ -30,12 +29,4 @@ description of the event, make sure to mention where to register if needed and w
 
 </form>
 
-</body>
-
-
-
-
-
-
-
-</html>
+{%endblock%}

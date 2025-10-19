@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+{% extends "layout.html" %}
 
-<html>
+{% block title %} Etusivu {% endblock %}
+
+{% block content %}
 
 <form action="/edit/{{tournament[0][0]}}" method="post">
 
@@ -19,7 +21,7 @@ title: <br >
 <textarea name="qualifier" rows="1"  cols="60"maxlength="2">{{tournament[0][4]}}</textarea>
 </p>
 <p>
-<textarea name="whenevent" rows="6" cols="60"maxlength="13">{{tournament[0][5]}}</textarea>
+<textarea name="whenevent" rows="6" cols="60"maxlength="16">{{tournament[0][5]}}</textarea>
 
 </p>
 <input type="submit" value="Lähetä" />
@@ -28,6 +30,4 @@ title: <br >
 </form>
 
 
-
-</html>
-
+{%endblock%}

@@ -4,7 +4,7 @@
 
 {% block content %}
 <head>
-  <title>Kirjautuminen</title>
+  <h1> Log in:</h1>
 </head>
 
 <body>
@@ -19,5 +19,11 @@
     </p>
     <input type="submit" value="Kirjaudu" />
   </form>
+
+  {% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+  {% endfor %}
 
   {%endblock%}

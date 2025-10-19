@@ -30,11 +30,11 @@
     <div class="tournament">
 <h1>
     <a href="/tournament/{{result[0]}}">{{result[1]}} </a></h1><br />
-    <p1>is there a qualifier: {{result[5]}}</p1><br /><br />
+    <p1><b>is there a qualifier:</b> {{result[5]}}</p1><br /><br />
 
-    <p1>description: {{result[2]}}</p1><br /><br />
-    <p1>organizer: {{result[3]}}</p1><br /><br />
-    <p1>date: {{result[4]}}</p1><br /><br />
+    <p1><b>description:</b> {{result[2]| show_lines}}</p1><br /><br />
+    <p1><b>organizer:</b> {{result[3]}}</p1><br /><br />
+    <p1><b>date:</b> {{result[4]}}</p1><br /><br />
 </div>
  {% endfor %}
   </ul>
